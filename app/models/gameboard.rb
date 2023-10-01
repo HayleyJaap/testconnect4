@@ -1,13 +1,9 @@
 class Gameboard
   #this class  represents the connecct 4 grid
   #which is 7 rows x 6 columns
-  #methods: Add piece, check win condition
+
   @@grid = Array.new(7) { Array.new(6, 0)}
 
-  # def initialize(arg)
-  #   super
-  #   @grid = Array.new(7) { Array.new(6, 0)}
-  # end
 
   def self.get_grid
     return @@grid
@@ -19,14 +15,11 @@ class Gameboard
   end
 
   def self.drop_checker(checker)
-    #TO DO: Figure out how to 'drop' a checker in
-    #we have the column
-    #so perhaps use a for loop to iterate down that column until location != null
 
     column = (checker.get_location)[1]
 
     if @@grid[-1][column] == 0
-      #if first checker in this column
+      #if first checker in this column, drop to the lowest spot
       @@grid[-1][column] = checker.get_number
       checker.set_row(@@grid.length - 1)
     else
@@ -39,7 +32,6 @@ class Gameboard
           #add the row to the checker's location
           checker.set_row(i - 1)
 
-          #fix this, bad logic
           break
         end
 
@@ -64,12 +56,12 @@ class Gameboard
     return won
   end
 
+  #below are the helper methods called to check win conditions
   def self.check_horizontal(checker)
     row = checker.get_location[0]
     col = checker.get_location[1]
     won = false
 
-    #loop for number of columns in a row
     for i in 0..@@grid[0].length - 4
       #red value = -1, yellow = 1 so we can add to check for a win
       connected = @@grid[row][i].to_i + @@grid[row][i + 1].to_i + @@grid[row][i + 2].to_i + @@grid[row][i + 3].to_i
@@ -87,9 +79,8 @@ class Gameboard
     col = checker.get_location[1]
     won = false
 
-    #loop for number of columns in a row
     for i in 0..@@grid.length - 4
-      #red value = -1, yellow = 1 so we can add to check for a win
+
       connected = @@grid[i][col].to_i + @@grid[i + 1][col].to_i + @@grid[i + 2][col].to_i + @@grid[i + 3][col].to_i
       if connected == 4 || connected == -4
         won = true
@@ -105,10 +96,9 @@ class Gameboard
     col = checker.get_location[1]
     won = false
 
-    #loop for number of columns in a row
     for i in 0..@@grid.length - 4
       for j in 0..@@grid[0].length - 4
-        #red value = -1, yellow = 1 so we can add to check for a win
+
         connected = @@grid[i][j].to_i + @@grid[i + 1][j + 1].to_i + @@grid[i + 2][j + 2].to_i + @@grid[i + 3][j + 3].to_i
         if connected == 4 || connected == -4
           won = true
@@ -118,7 +108,7 @@ class Gameboard
 
     for i in 3..@@grid.length-1
       for j in 0..@@grid[0].length - 4
-        #red value = -1, yellow = 1 so we can add to check for a win
+
         connected = @@grid[i][j].to_i + @@grid[i - 1][j + 1].to_i + @@grid[i - 2][j + 2].to_i + @@grid[i - 3][j + 3].to_i
         if connected == 4 || connected == -4
           won = true

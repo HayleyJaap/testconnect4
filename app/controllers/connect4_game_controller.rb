@@ -1,37 +1,31 @@
 class Connect4GameController < ApplicationController
-   #board is just an array of checkers
-  #so this controller IS the gameboard
-  #and the checkers will be a model
-  #because ultimately the board is just the middleman
-  #between the data (checkers) and the view
+  #this method is needed for routing purposes, even though it is empty
   def home()
   end
 
   def play()
-    #this method gets called again when receiving params from user
 
-    #ways this method gets called
-    # 1) when the user presses the play button on the home page
-    # that will get called with empty params?
-    # 2) when the user enters the column that they want to drop a checker in
-    # that will have params to parse
-
+    #restarting the game?
     if params.key?(:play_again) && params[:play_again] == "yes"
       @game_board = Gameboard.initialize_board
       @current_player = session[:current_player]
 
+    #player made a move
     elsif params.key?(:col)
       @current_player = session[:current_player]
       column = params[:col]
       @bad_input = false
 
+      #input validation
       if !column.scan(/\D/).empty?
-        #bad input
         @bad_input = true
+
       #we know input was a number so we can cast and check
       elsif column.to_i > 6 || column.to_i < 1
         @bad_input = true
       else
+        #game logic in this part is:
+        #create new checker, add to board, check win condition, alternate players
         checker = Checker.new(@current_player, column.to_i - 1)
         Gameboard.drop_checker(checker)
 
@@ -47,10 +41,11 @@ class Connect4GameController < ApplicationController
         end
       end
 
+      #save the grid in an instance variable so that it can be displayed by the view
       @game_board = Gameboard.get_grid
 
     else
-      #start for first time
+      #start the game for first time
       @game_board = Gameboard.initialize_board
       session[:current_player] = "Red"
       @current_player = session[:current_player]

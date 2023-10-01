@@ -1,7 +1,5 @@
 class Checker
   #this represents a single checker
-  #attributes: coordinates of location on grid, color (red or yellow)
-  # TO DO: figure out how to calculate row that checker is in
 
   def initialize(color, column)
     @location = [nil, column]
