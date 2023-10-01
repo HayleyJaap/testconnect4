@@ -16,47 +16,45 @@ class Gameboard
   def self.drop_checker(checker)
 
     column = (checker.get_location)[1]
+    dropped = false
 
     if @@grid[-1][column] == 0
       #if first checker in this column, drop to the lowest spot
       @@grid[-1][column] = checker.get_number
       checker.set_row(@@grid.length - 1)
+      dropped = true
     else
 
       for i in 0..@@grid.length - 1
 
-        if @@grid[i][column] != 0
+        if @@grid[i][column] != 0 && @@grid[i - 1][column] != "1" && @@grid[i - 1][column] != "-1"
           @@grid[i - 1][column] = checker.get_number
 
           #add the row to the checker's location
           checker.set_row(i - 1)
-
+          dropped = true
           break
         end
 
       end
 
     end
-
+    return dropped
   end #drop_checker
 
-  def self.check_full
-    full = true
-
-    for i in 0..@@grid.length - 1
-      for j in 0..@@grid[0].length - 1
-        if @@grid[i][j] == "0"
-          full = false
-        end
-      end
-    end
-
-    return full
-  end
 
   def self.game_over?(checker)
     won = false
-    won = check_horizontal(checker)
+
+    # full = check_full
+
+    # if full
+    #   won = true
+    # end
+
+    if !won
+      won = check_horizontal(checker)
+    end
 
     if !won
       won = check_vertical(checker)
@@ -67,6 +65,21 @@ class Gameboard
     end
 
     return won
+  end
+
+  def self.check_full
+    full = true
+
+    for i in 0..@@grid.length - 1
+      for j in 0..@@grid[0].length - 1
+        #if any empty spots left in board
+        if @@grid[i][j] == 0
+          full = false
+        end
+      end
+    end
+
+    return full
   end
 
   #below are the helper methods called to check win conditions

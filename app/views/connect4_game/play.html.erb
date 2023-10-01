@@ -20,6 +20,8 @@
     <form method='GET'>
       <% if @bad_input %>
         <label for="col"> That was not a valid column number, <%= @current_player %>, please try again by entering the column [1 - 6] to drop your checker</label><br>
+      <% elsif !@dropped %>
+        <label for="col"> That column is full, <%= @current_player %>, please try again by entering the column [1 - 6] to drop your checker</label><br>
       <% else %>
         <label for="col"> <%= @current_player %>, please enter the column [1 - 6] to drop your checker</label><br>
       <% end %>
