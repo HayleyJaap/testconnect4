@@ -21,22 +21,30 @@ class Connect4GameController < ApplicationController
       @current_player = session[:current_player]
 
     elsif params.key?(:col)
-
-      column = params[:col]
-
       @current_player = session[:current_player]
-      checker = Checker.new(@current_player, column.to_i - 1)
-      Gameboard.drop_checker(checker)
+      column = params[:col]
+      @bad_input = false
 
-      @won = Gameboard.game_over?(checker)
-      @winner = @current_player
-
-      if @current_player == "Red"
-        @current_player = "Yellow"
-        session[:current_player] = "Yellow"
+      if !column.scan(/\D/).empty?
+        #bad input
+        @bad_input = true
+      #we know input was a number so we can cast and check
+      elsif column.to_i > 6 || column.to_i < 1
+        @bad_input = true
       else
-        @current_player = "Red"
-        session[:current_player] = "Red"
+        checker = Checker.new(@current_player, column.to_i - 1)
+        Gameboard.drop_checker(checker)
+
+        @won = Gameboard.game_over?(checker)
+        @winner = @current_player
+
+        if @current_player == "Red"
+          @current_player = "Yellow"
+          session[:current_player] = "Yellow"
+        else
+          @current_player = "Red"
+          session[:current_player] = "Red"
+        end
       end
 
       @game_board = Gameboard.get_grid

@@ -100,9 +100,13 @@
             <% end %>
             </div>
 
-            <% if !@won %>
+            <% if !@won%>
             <form method='GET'>
-              <label for="col"> <%= @current_player %>, please enter the column [1 - 6] to drop your checker</label><br>
+                <% if @bad_input %>
+                    <label for="col"> That was not a valid column number, <%= @current_player %>, please try again by entering the column [1 - 6] to drop your checker</label><br>
+                <% else %>
+                    <label for="col"> <%= @current_player %>, please enter the column [1 - 6] to drop your checker</label><br>
+                <% end %>
               <input type="text" id = "col" name="col">
               <button type="submit" class="button2"> Submit </button>
             </form>
