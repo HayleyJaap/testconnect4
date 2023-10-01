@@ -31,9 +31,13 @@ class Connect4GameController < ApplicationController
         Gameboard.drop_checker(checker)
 
         @won = Gameboard.game_over?(checker)
-        @winner = @current_player
+
+        if @won
+          @winner = @current_player
+          session[:winner] = @winner
+        end
+
         session[:won] = @won
-        session[:winner] = @winner
 
         if @current_player == "Red"
           @current_player = "Yellow"
@@ -59,7 +63,6 @@ class Connect4GameController < ApplicationController
       session[:current_player] = "Red"
       @current_player = session[:current_player]
       session[:won] = false
-
     end
 
   end

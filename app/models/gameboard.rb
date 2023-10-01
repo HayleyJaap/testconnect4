@@ -4,7 +4,6 @@ class Gameboard
 
   @@grid = Array.new(7) { Array.new(6, 0)}
 
-
   def self.get_grid
     return @@grid
   end
