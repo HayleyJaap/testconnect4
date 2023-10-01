@@ -9,9 +9,10 @@ class Connect4GameController < ApplicationController
     if params.key?(:play_again) && params[:play_again] == "yes"
       @game_board = Gameboard.initialize_board
       @current_player = session[:current_player]
+      session[:won] = false
 
-    #player made a move
-    elsif params.key?(:col)
+    #player made a move, game has not been won yet
+    elsif params.key?(:col) && !session[:won]
       @current_player = session[:current_player]
       column = params[:col]
       @bad_input = false
@@ -31,6 +32,8 @@ class Connect4GameController < ApplicationController
 
         @won = Gameboard.game_over?(checker)
         @winner = @current_player
+        session[:won] = @won
+        session[:winner] = @winner
 
         if @current_player == "Red"
           @current_player = "Yellow"
@@ -44,11 +47,18 @@ class Connect4GameController < ApplicationController
       #save the grid in an instance variable so that it can be displayed by the view
       @game_board = Gameboard.get_grid
 
+    #game has been won
+    elsif session[:won]
+      @game_board = Gameboard.get_grid
+      @won = session[:won]
+      @winner = session[:winner]
+
     else
       #start the game for first time
       @game_board = Gameboard.initialize_board
       session[:current_player] = "Red"
       @current_player = session[:current_player]
+      session[:won] = false
 
     end
 

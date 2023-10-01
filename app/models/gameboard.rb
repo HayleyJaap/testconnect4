@@ -41,6 +41,20 @@ class Gameboard
 
   end #drop_checker
 
+  def self.check_full
+    full = true
+
+    for i in 0..@@grid.length - 1
+      for j in 0..@@grid[0].length - 1
+        if @@grid[i][j] == "0"
+          full = false
+        end
+      end
+    end
+
+    return full
+  end
+
   def self.game_over?(checker)
     won = false
     won = check_horizontal(checker)
