@@ -1,0 +1,118 @@
+<html>
+
+<head>
+    <style>
+    body {
+      background-color: rgba(5, 5, 5, 0.9);
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto auto auto auto auto auto;
+      column-gap: 5px;
+      row-gap: 5px;
+      background-color: rgb(0, 7, 168);
+      padding: 10px;
+      width: 750px;
+      margin: auto;
+      border: 5px solid rgb(255, 255, 255);
+      border-radius: 2%;
+    }
+    .grid-item {
+      background-color: rgba(255, 255, 255);
+      border: 2px solid black;
+      padding: 10px;
+      font-size: 30px;
+      text-align: center;
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+      margin: auto;
+    }
+
+    .yellow-checker {
+      background-color: rgba(255, 245, 0);
+      border: 2px solid black;
+      padding: 10px;
+      font-size: 30px;
+      text-align: center;
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+      margin: auto;
+    }
+
+    .red-checker {
+      background-color: rgba(255, 0, 0);
+      border: 2px solid black;
+      padding: 10px;
+      font-size: 30px;
+      text-align: center;
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+      margin: auto;
+    }
+
+    form {
+      color: rgba(255, 255, 255);
+      font-size: 25px;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+
+    input[type=text] {
+      font-size: 20px;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+
+    .button1 {
+      font-size: 20px;
+      text-align: center;
+      width: 60px;
+      display:inline-block;
+    }
+    .button2 {
+      margin-top: 10px;
+      font-size: 20px;
+      text-align: center;
+      width: 90px;
+    }
+
+
+    </style>
+    </head>
+
+        <body>
+            <div class="grid-container">
+            <% @game_board.each do |row|%>
+              <% row.each do |slot| %>
+                <% if slot == "1" %>
+                  <div class="yellow-checker"> </div>
+                <% elsif slot == "-1" %>
+                  <div class="red-checker"> </div>
+                <% else %>
+                  <div class="grid-item"> </div>
+                <% end %>
+              <% end %>
+            <% end %>
+            </div>
+
+            <% if !@won %>
+            <form method='GET'>
+              <label for="col"> <%= @current_player %>, please enter the column [1 - 6] to drop your checker</label><br>
+              <input type="text" id = "col" name="col">
+              <button type="submit" class="button2"> Submit </button>
+            </form>
+            <% else %>
+              <form>
+              <label> <%= @winner %> won the game! </label> <br>
+              <label> Would you like to play again? </label> <br>
+              <%= button_to "Yes", connect4_game_path, :method => "get", params: {play_again: "yes"}, :class => "button1"%>
+              <%= button_to "No", connect4_game_play_path, :method => "get", :class => "button1"%>
+              </form>
+            <% end %>
+        </body>
+</html>
